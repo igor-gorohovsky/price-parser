@@ -15,5 +15,9 @@ class ChromeBrowser():
 			print(e)
 
 
-	def tear_down(self):
+	def close(self):
 		self.driver.quit()
+
+
+	def get(self, url):
+		return self.driver.get(url)
