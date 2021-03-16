@@ -11,7 +11,7 @@ class Urls(Base):
 	__tablename__ = 'urls'
 
 	id = Column(Integer, primary_key=True)
-	url = Column(String, nullable=False)
+	url = Column(String, nullable=False, unique=True)
 
 
 class Prices(Base):
