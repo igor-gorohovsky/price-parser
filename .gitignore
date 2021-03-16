@@ -1,1 +1,5 @@
-__pycache__
+*__pycache__/
+db_config.py urls.txt
+db_config.py, urls.txt
+db_config.py
+urls.txt

@@ -1,11 +1,12 @@
-from sqlalchemy import create_engine
+from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
 
 from models.site_models import *
+from models.db_config import config
 
 
 def main():
-	engine = create_engine('postgresql+psycopg2:///parser')
+	engine = engine_from_config(config, prefix='db.')
 
 	Session = sessionmaker(bind=engine)
 	session = Session()

@@ -1,7 +1,9 @@
 from sqlalchemy import *
 from sqlalchemy.orm import declarative_base
 
-engine = create_engine('postgresql+psycopg2:///parser', echo=True)
+from db_config import config
+
+engine = engine_from_config(config, prefix='db.')
 
 
 Base = declarative_base()
