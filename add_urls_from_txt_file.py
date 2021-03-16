@@ -33,8 +33,8 @@ def main():
 	Session = sessionmaker(bind=engine)
 	session = Session()
 
-	urls = _get_urls_from_txt()
-	instances = _create_list_of_instances_of_the_urls_class(urls)
+	urls = get_urls_from_txt()
+	instances = get_list_for_query(urls)
 
 	session.add_all(instances)
 	session.commit()	

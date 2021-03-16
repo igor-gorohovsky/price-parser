@@ -1,7 +1,7 @@
 from sqlalchemy import *
 from sqlalchemy.orm import declarative_base
 
-from db_config import config
+from models.db_config import config
 
 engine = engine_from_config(config, prefix='db.')
 
