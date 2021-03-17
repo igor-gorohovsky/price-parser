@@ -1,5 +1,4 @@
 from datetime import datetime
-from re import sub
 
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
@@ -55,7 +54,7 @@ class Parser():
 			self.session.add(
 				Prices(
 					url_id=url.id, 
-					date=datetime.now(), 
+					date=datetime.now().replace(microsecond=0), 
 					current_price=current_price,
 					old_price=old_price,
 					discount=discount)
