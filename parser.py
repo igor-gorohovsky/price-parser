@@ -1,4 +1,5 @@
 from datetime import datetime
+from re import sub
 
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
@@ -20,7 +21,7 @@ class Parser():
 
 	def _get_current_price(self):
 		try:
-			price = self.webdriver.find_element_by_class_name(Rozetka.current_price_path).text
+			price = self.webdriver.find_element_by_class_name(Rozetka.current_price_path).price
 			return price
 		except NoSuchElementException as e:
 			print("Can't find a price")
@@ -28,7 +29,7 @@ class Parser():
 
 	def _get_old_price(self):
 		try:
-			price = self.webdriver.find_element_by_class_name(Rozetka.old_price_path).text
+			price = self.webdriver.find_element_by_class_name(Rozetka.old_price_path).price
 		except NoSuchElementException as e:
 			price = None
 		finally:
@@ -43,6 +44,7 @@ class Parser():
 
 			current_price = self._get_current_price()
 			old_price = self._get_old_price()
+
 			self.session.add(
 				Prices(
 					url_id=url.id, 
