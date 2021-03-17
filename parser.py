@@ -36,6 +36,12 @@ class Parser():
 			return price
 
 
+	def _get_discount(self, old_price, current_price):
+		if old_price:
+			return old_price - current_price
+		return None
+
+
 	def start(self):
 		urls = self.session.query(Urls)
 
@@ -44,13 +50,15 @@ class Parser():
 
 			current_price = self._get_current_price()
 			old_price = self._get_old_price()
+			discount = self._get_discount(old_price, current_price)
 
 			self.session.add(
 				Prices(
 					url_id=url.id, 
 					date=datetime.now(), 
 					current_price=current_price,
-					old_price=old_price)
+					old_price=old_price,
+					discount=discount)
 				)
 
 
