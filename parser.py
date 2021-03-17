@@ -18,12 +18,21 @@ class Parser():
 		self.session = Session()
 
 
-	def _get_price(self):
+	def _get_current_price(self):
 		try:
-			price = self.webdriver.find_element_by_class_name(Rozetka.price_path).text
+			price = self.webdriver.find_element_by_class_name(Rozetka.current_price_path).text
 			return price
 		except NoSuchElementException as e:
 			print("Can't find a price")
+
+
+	def _get_old_price(self):
+		try:
+			price = self.webdriver.find_element_by_class_name(Rozetka.old_price_path).text
+		except NoSuchElementException as e:
+			price = None
+		finally:
+			return price
 
 
 	def start(self):
@@ -32,8 +41,15 @@ class Parser():
 		for url in urls:
 			self.webdriver.get(url.url)
 
-			price = self._get_price()
-			self.session.add(Prices(url_id=url.id, date=datetime.now(), price=price))
+			current_price = self._get_current_price()
+			old_price = self._get_old_price()
+			self.session.add(
+				Prices(
+					url_id=url.id, 
+					date=datetime.now(), 
+					current_price=current_price,
+					old_price=old_price)
+				)
 
 
 	def save_session(self):

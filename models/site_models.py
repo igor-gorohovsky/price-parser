@@ -22,7 +22,8 @@ class Prices(Base):
 
 	url_id = Column(Integer, ForeignKey('urls.id'))
 	date = Column(DateTime, nullable=False)
-	price = Column(String(10))
+	current_price = Column(String(10))
+	old_price = Column(String(15))
 
 
 if __name__ == '__main__':
