@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 
 from sites import Rozetka
 
@@ -13,25 +14,23 @@ class Parser():
 		self.driver.get(url)
 
 
-	def get_current_price(self):
-		"""Parse info about current price"""
-		return self.driver.get_element_by_class_name(Rozetka.current_price_path).price
+	def get_price(self, class_name) -> str:
+		"""Get price by class name"""
+		try:
+			return self.driver.find_element_by_class_name(class_name).price
+		except NoSuchElementException:
+			return ''
 
 
-	def get_old_price(self):
-		"""Parse info about old(without discount) price"""
-		return self.driver.get_element_by_class_name(Rozetka.old_price_path).price
-
-
-	def set_datetime(self):
+	def set_datetime(self) -> datetime:
 		"""Set time of data parsing"""
-		return datetime.now(microseconds=0)
+		return datetime.now().replace(microsecond=0)
 
 
-	def run(self, driver):
+	def run(self) -> dict:
 		"""Start data parcing"""
-		current = self.get_current_price()
-		old = self.get_old_price()
+		current = self.get_price(Rozetka.current_price_path)
+		old = self.get_price(Rozetka.old_price_path)
 		date = self.set_datetime()
 
 		data = {'current_price': current, 'old_price': old, 'date': date}
