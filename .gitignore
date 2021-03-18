@@ -1,5 +1,6 @@
-*__pycache__/
-db_config.py urls.txt
-db_config.py, urls.txt
-db_config.py
+models
+__pycahce__
 urls.txt
+main.py
+test.py
+__pycache__

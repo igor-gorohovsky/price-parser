@@ -1,65 +1,38 @@
 from datetime import datetime
 
-from sqlalchemy import engine_from_config
-from sqlalchemy.orm import sessionmaker
 from selenium import webdriver
-from selenium.common.exceptions import *
 
-from models.site_models import *
-from sites import *
+from sites import Rozetka
 
 
 class Parser():
 
 
-	def __init__(self):
-		self.webdriver = webdriver.Chrome()
-		Session = sessionmaker(bind=engine)
-		self.session = Session()
+	def __init__(self, url: str):
+		self.driver = webdriver.Chrome()
+		self.driver.get(url)
 
 
-	def _get_current_price(self):
-		try:
-			price = self.webdriver.find_element_by_class_name(Rozetka.current_price_path).price
-			return price
-		except NoSuchElementException as e:
-			print("Can't find a price")
+	def get_current_price(self):
+		"""Parse info about current price"""
+		return self.driver.get_element_by_class_name(Rozetka.current_price_path).price
 
 
-	def _get_old_price(self):
-		try:
-			price = self.webdriver.find_element_by_class_name(Rozetka.old_price_path).price
-		except NoSuchElementException as e:
-			price = None
-		finally:
-			return price
+	def get_old_price(self):
+		"""Parse info about old(without discount) price"""
+		return self.driver.get_element_by_class_name(Rozetka.old_price_path).price
 
 
-	def _get_discount(self, old_price, current_price):
-		if old_price:
-			return old_price - current_price
-		return None
+	def set_datetime(self):
+		"""Set time of data parsing"""
+		return datetime.now(microseconds=0)
 
 
-	def start(self):
-		urls = self.session.query(Urls)
+	def run(self, driver):
+		"""Start data parcing"""
+		current = self.get_current_price()
+		old = self.get_old_price()
+		date = self.set_datetime()
 
-		for url in urls:
-			self.webdriver.get(url.url)
-
-			current_price = self._get_current_price()
-			old_price = self._get_old_price()
-			discount = self._get_discount(old_price, current_price)
-
-			self.session.add(
-				Prices(
-					url_id=url.id, 
-					date=datetime.now().replace(microsecond=0), 
-					current_price=current_price,
-					old_price=old_price,
-					discount=discount)
-				)
-
-
-	def save_session(self):
-		self.session.commit()
+		data = {'current_price': current, 'old_price': old, 'date': date}
+		return data
