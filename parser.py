@@ -9,17 +9,16 @@ from sites import Rozetka
 class Parser():
 
 
-	def __init__(self, url: str):
+	def __init__(self):
 		self.driver = webdriver.Chrome()
-		self.driver.get(url)
 
 
-	def get_price(self, class_name) -> str:
+	def get_price(self, class_name: str) -> int:
 		"""Get price by class name"""
 		try:
 			return self.driver.find_element_by_class_name(class_name).price
 		except NoSuchElementException:
-			return ''
+			return None
 
 
 	def set_datetime(self) -> datetime:
@@ -27,11 +26,17 @@ class Parser():
 		return datetime.now().replace(microsecond=0)
 
 
-	def run(self) -> dict:
+	def run(self, url: str) -> dict:
 		"""Start data parcing"""
+		self.driver.get(url)
+
 		current = self.get_price(Rozetka.current_price_path)
 		old = self.get_price(Rozetka.old_price_path)
 		date = self.set_datetime()
 
 		data = {'current_price': current, 'old_price': old, 'date': date}
 		return data
+
+
+	def turn_off(self):
+		self.driver.quit()
