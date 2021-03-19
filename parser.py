@@ -10,7 +10,9 @@ class Parser():
 
 
 	def __init__(self):
-		self.driver = webdriver.Chrome()
+		options = webdriver.ChromeOptions()
+		options.add_argument('--headless')
+		self.driver = webdriver.Chrome(options=options)
 
 
 	def get_price(self, class_name: str) -> int:
