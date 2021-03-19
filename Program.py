@@ -1,3 +1,5 @@
+import logging
+
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
 
@@ -12,6 +14,7 @@ class Program():
 	def __init__(self):
 		Session = sessionmaker()
 		self.session = Session(bind=engine_from_config(config, prefix='db.'))
+		logging.basicConfig(level=logging.INFO)
 
 
 	def start(self):
@@ -24,6 +27,7 @@ class Program():
 
 		# Start parse
 		for url in urls:
+			logging.info(f'Starting to parse: {url.url}')
 			data = parser.run(url.url)
 
 
@@ -40,7 +44,12 @@ class Program():
 					)
 				)
 
+		logging.info('Finishing parsing...')
 		parser.turn_off()
+
+		logging.info('Saving the received data to the database...')
+		self.session.commit()
+
 
 
 	def save_session(self):
