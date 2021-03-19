@@ -49,11 +49,3 @@ class Program():
 
 		logging.info('Saving the received data to the database...')
 		self.session.commit()
-
-
-
-	def save_session(self):
-		"""Save parsing data to db"""
-		self.session.commit()
-
-
