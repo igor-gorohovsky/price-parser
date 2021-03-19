@@ -17,7 +17,7 @@ class Program():
 		logging.basicConfig(level=logging.INFO)
 
 
-	def start(self):
+	def parse(self):
 		"""Parse all urls from db"""
 
 		# Get all urls from db
