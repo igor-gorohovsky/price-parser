@@ -8,6 +8,7 @@ from models.db_config import config
 
 class Program():
 
+
 	def __init__(self):
 		Session = sessionmaker()
 		self.session = Session(bind=engine_from_config(config, prefix='db.'))
@@ -34,7 +35,8 @@ class Program():
 						date=data['date'], 
 						current_price=data['current_price'],
 						old_price=data['old_price'],
-						discount=None if not data['old_price'] else data['old_price']-data['current_price']
+						discount=None if not data['old_price'] else data['old_price']-data['current_price'],
+						status=data['status']
 					)
 				)
 

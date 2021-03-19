@@ -26,15 +26,25 @@ class Parser():
 		return datetime.now().replace(microsecond=0)
 
 
+	def get_status(self, class_name):
+		"""Get availability status"""
+		try:
+			return self.driver.find_element_by_class_name(class_name).text
+		except NoSuchElementException:
+			raise Exception("Couldn't find a product status, check page")
+
+
 	def run(self, url: str) -> dict:
 		"""Start data parcing"""
+
 		self.driver.get(url)
 
 		current = self.get_price(Rozetka.current_price_path)
 		old = self.get_price(Rozetka.old_price_path)
 		date = self.set_datetime()
+		status = self.get_status(Rozetka.status_path)
 
-		data = {'current_price': current, 'old_price': old, 'date': date}
+		data = {'current_price': current, 'old_price': old, 'date': date, 'status': status}
 		return data
 
 
