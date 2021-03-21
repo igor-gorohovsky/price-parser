@@ -7,5 +7,5 @@ Rozetka = namedtuple(
 Rozetka = Rozetka(
     'product-prices__big',
     'product-prices__small',
-    'product__status'
+    'product__status',
 )

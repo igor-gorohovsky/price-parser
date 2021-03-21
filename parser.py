@@ -1,57 +1,110 @@
 from datetime import datetime
+from typing import Optional, List, Dict
 import atexit
+import re
+import logging
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from sqlalchemy import engine_from_config
+from sqlalchemy.orm import sessionmaker, session
 
 from sites import Rozetka
+from models.site_models import Prices, Urls
+from models.db_config import config
 
 
 class Parser():
 
-    def __init__(self):
+    browser: webdriver
+
+    def __init__(self, is_headless: bool):
         options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
-        self.driver = webdriver.Chrome(options=options)
+        if is_headless:
+            options.add_argument('--headless')
+        self.browser = webdriver.Chrome(options=options)
 
-        atexit.register(self.turn_off)
+        atexit.register(self.browser.quit)
 
-    def get_price(self, element_path: str) -> int:
+    def _get_price(self, element_path: str) -> Optional[int]:
         """ Get price by element_path.
-            element_path is from class Rozetka."""
+
+            element_path is the name of the tag or tag's attribute by which
+            we can find the necessary information of the product on the page
+            using Selenium API
+        """
+
+        # Check if we can find a price element
         try:
-            return self.driver.find_element_by_class_name(element_path).price
+            price = self.browser.find_element_by_class_name(element_path).text
+            # Remove all symbols except numbers
+            return int(re.sub('\D', '', price))
         except NoSuchElementException:
             return None
 
-    def set_datetime(self) -> datetime:
-        """Set time of data parsing"""
+    def _set_datetime(self) -> datetime:
+        """Set time of parsing"""
         return datetime.now().replace(microsecond=0)
 
-    def get_status(self, class_name):
-        """Get availability status"""
+    def _get_status(self, status_path):
+        """Get availability status of the product
+
+            element_path is the name of the tag or tag's attribute by which
+            we can find the necessary information of the product on the page
+            using Selenium API
+        """
         try:
-            return self.driver.find_element_by_class_name(class_name).text
+            return self.browser.find_element_by_class_name(status_path).text
         except NoSuchElementException:
-            raise Exception("Couldn't find a product status, check page")
+            raise NoSuchElementException(
+                "Couldn't find a product status, check page"
+            )
 
-    def run(self, url: str) -> dict:
-        """Start data parcing"""
+    def parse(self, urls: Dict[int, str]) -> List[Prices]:
+        """Parse data"""
+        data = list()
 
-        self.driver.get(url)
+        for id, url in urls.items():
+            self.browser.get(url)
+            logging.info(f'Starting to parse: {url}')
+            current_price = self._get_price(Rozetka.current_price_path)
+            old_price = self._get_price(Rozetka.old_price_path)
+            date = self._set_datetime()
+            discount = old_price - current_price if old_price else None
+            status = self._get_status(Rozetka.status_path)
 
-        current = self.get_price(Rozetka.current_price_path)
-        old = self.get_price(Rozetka.old_price_path)
-        date = self.set_datetime()
-        status = self.get_status(Rozetka.status_path)
-
-        data = {
-            'current_price': current,
-            'old_price': old,
-            'date': date,
-            'status': status
-        }
+            data.append(
+                Prices(
+                    url_id=id,
+                    date=date,
+                    current_price=current_price,
+                    old_price=old_price,
+                    discount=discount,
+                    status=status,
+                )
+            )
         return data
 
-    def turn_off(self):
-        self.driver.quit()
+
+class Program():
+
+    parser: Parser
+    session: session.Session
+
+    def __init__(self, is_headless: bool = True):
+        self.parser = Parser(is_headless)
+        Session = sessionmaker(
+            bind=engine_from_config(config, prefix='db.')
+        )
+        self.session = Session()
+        logging.basicConfig(level=logging.INFO)
+        atexit.register(self.session.commit)
+
+    def _get_urls(self):
+        urls = self.session.query(Urls).all()
+        return {url.id: url.url for url in urls}
+
+    def run(self):
+        urls = self._get_urls()
+        data = self.parser.parse(urls)
+        self.session.add_all(data)
