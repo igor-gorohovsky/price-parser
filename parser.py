@@ -16,8 +16,6 @@ from models.db_config import config
 
 class Parser():
 
-    __browser: webdriver
-
     def __init__(self, is_headless: bool):
         options = webdriver.ChromeOptions()
         if is_headless:
@@ -99,9 +97,6 @@ class Parser():
 
 
 class Program():
-
-    __parser: Parser
-    __session: session.Session
 
     def __init__(self, is_headless: bool = True):
         self.__parser = Parser(is_headless)
