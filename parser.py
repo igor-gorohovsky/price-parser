@@ -61,6 +61,10 @@ class Parser():
                 "Couldn't find a product status, check page"
             )
 
+    def __connect_to_page(url: str):
+        self.browser.get(url)
+        self._is_page_available(url)
+
     def _is_page_available(self, url: str):
         if self.browser.current_url != url:
             raise Exception("Page isn't available")
@@ -70,8 +74,7 @@ class Parser():
         data = list()
 
         for id, url in urls.items():
-            self.browser.get(url)
-            self._is_page_available(url)
+            __connect_to_page(url)
 
             logging.info(f'Starting to parse: {url}')
 
