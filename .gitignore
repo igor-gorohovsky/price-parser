@@ -1,4 +1,4 @@
-models
+db_config.py
 __pycahce__
 urls.txt
 main.py
