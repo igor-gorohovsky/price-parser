@@ -24,6 +24,7 @@ class Parser():
             options.add_argument('--headless')
         self.browser = webdriver.Chrome(options=options)
 
+        logging.basicConfig(level=logging.INFO)
         atexit.register(self.browser.quit)
 
     def _get_price(self, element_path: str) -> Optional[int]:
@@ -46,7 +47,7 @@ class Parser():
         """Set time of parsing"""
         return datetime.now().replace(microsecond=0)
 
-    def _get_status(self, status_path):
+    def _get_status(self, status_path: str) -> Optional[str]:
         """Get availability status of the product
 
             element_path is the name of the tag or tag's attribute by which
@@ -60,13 +61,20 @@ class Parser():
                 "Couldn't find a product status, check page"
             )
 
+    def _is_page_available(self, url: str):
+        if self.browser.current_url != url:
+            raise Exception("Page isn't available")
+
     def parse(self, urls: Dict[int, str]) -> List[Prices]:
         """Parse data"""
         data = list()
 
         for id, url in urls.items():
             self.browser.get(url)
+            self._is_page_available(url)
+
             logging.info(f'Starting to parse: {url}')
+
             current_price = self._get_price(Rozetka.current_price_path)
             old_price = self._get_price(Rozetka.old_price_path)
             date = self._set_datetime()
@@ -97,7 +105,6 @@ class Program():
             bind=engine_from_config(config, prefix='db.')
         )
         self.session = Session()
-        logging.basicConfig(level=logging.INFO)
         atexit.register(self.session.commit)
 
     def _get_urls(self):

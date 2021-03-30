@@ -21,7 +21,7 @@ def get_list_for_query(urls):
 
     instances = []
     for url in urls:
-        instances.append(Urls(url=url))
+        instances.append(Urls(url=url.strip()))
     return instances
 
 
