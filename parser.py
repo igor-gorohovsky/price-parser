@@ -61,10 +61,12 @@ class Parser():
             )
 
     def __connect_to_page(self, url: str):
+        """Open and checks availability of the page"""
         self.__browser.get(url)
         self.__is_page_available(url)
 
     def __is_page_available(self, url: str):
+        """Checks if we were redirected to page with captha"""
         if self.__browser.current_url != url:
             raise Exception("Page isn't available")
 
@@ -110,10 +112,12 @@ class Program():
         atexit.register(self.__session.commit)
 
     def __get_urls(self):
+        """Retrieves urls from DB"""
         urls = self.__session.query(Urls).all()
         return {url.id: url.url for url in urls}
 
     def run(self):
+        """Starts parsing and save data to DB"""
         urls = self.__get_urls()
         data = self.__parser.parse(urls)
         self.__session.add_all(data)
