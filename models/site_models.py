@@ -25,7 +25,7 @@ class Prices(Base):
 	current_price = Column(Integer)
 	old_price = Column(Integer)
 	discount = Column(Integer)
-	status = Column(String(15))
+	status = Column(String(20))
 
 
 if __name__ == '__main__':

@@ -16,18 +16,18 @@ from models.db_config import config
 
 class Parser():
 
-    browser: webdriver
+    __browser: webdriver
 
     def __init__(self, is_headless: bool):
         options = webdriver.ChromeOptions()
         if is_headless:
             options.add_argument('--headless')
-        self.browser = webdriver.Chrome(options=options)
+        self.__browser = webdriver.Chrome(options=options)
 
         logging.basicConfig(level=logging.INFO)
-        atexit.register(self.browser.quit)
+        atexit.register(self.__browser.quit)
 
-    def _get_price(self, element_path: str) -> Optional[int]:
+    def __get_price(self, element_path: str) -> Optional[int]:
         """ Get price by element_path.
 
             element_path is the name of the tag or tag's attribute by which
@@ -37,17 +37,16 @@ class Parser():
 
         # Check if we can find a price element
         try:
-            price = self.browser.find_element_by_class_name(element_path).text
-            # Remove all symbols except numbers
+            price = self.__browser.find_element_by_class_name(element_path).text
             return int(re.sub('\D', '', price))
         except NoSuchElementException:
             return None
 
-    def _set_datetime(self) -> datetime:
+    def __set_datetime(self) -> datetime:
         """Set time of parsing"""
         return datetime.now().replace(microsecond=0)
 
-    def _get_status(self, status_path: str) -> Optional[str]:
+    def __get_status(self, status_path: str) -> Optional[str]:
         """Get availability status of the product
 
             element_path is the name of the tag or tag's attribute by which
@@ -55,18 +54,18 @@ class Parser():
             using Selenium API
         """
         try:
-            return self.browser.find_element_by_class_name(status_path).text
+            return self.__browser.find_element_by_class_name(status_path).text
         except NoSuchElementException:
             raise NoSuchElementException(
                 "Couldn't find a product status, check page"
             )
 
-    def __connect_to_page(url: str):
-        self.browser.get(url)
-        self._is_page_available(url)
+    def __connect_to_page(self, url: str):
+        self.__browser.get(url)
+        self.__is_page_available(url)
 
-    def _is_page_available(self, url: str):
-        if self.browser.current_url != url:
+    def __is_page_available(self, url: str):
+        if self.__browser.current_url != url:
             raise Exception("Page isn't available")
 
     def parse(self, urls: Dict[int, str]) -> List[Prices]:
@@ -74,15 +73,15 @@ class Parser():
         data = list()
 
         for id, url in urls.items():
-            __connect_to_page(url)
+            self.__connect_to_page(url)
 
             logging.info(f'Starting to parse: {url}')
 
-            current_price = self._get_price(Rozetka.current_price_path)
-            old_price = self._get_price(Rozetka.old_price_path)
-            date = self._set_datetime()
+            current_price = self.__get_price(Rozetka.current_price_path)
+            old_price = self.__get_price(Rozetka.old_price_path)
+            date = self.__set_datetime()
             discount = old_price - current_price if old_price else None
-            status = self._get_status(Rozetka.status_path)
+            status = self.__get_status(Rozetka.status_path)
 
             data.append(
                 Prices(
@@ -99,22 +98,22 @@ class Parser():
 
 class Program():
 
-    parser: Parser
-    session: session.Session
+    __parser: Parser
+    __session: session.Session
 
     def __init__(self, is_headless: bool = True):
-        self.parser = Parser(is_headless)
+        self.__parser = Parser(is_headless)
         Session = sessionmaker(
             bind=engine_from_config(config, prefix='db.')
         )
-        self.session = Session()
-        atexit.register(self.session.commit)
+        self.__session = Session()
+        atexit.register(self.__session.commit)
 
-    def _get_urls(self):
-        urls = self.session.query(Urls).all()
+    def __get_urls(self):
+        urls = self.__session.query(Urls).all()
         return {url.id: url.url for url in urls}
 
     def run(self):
-        urls = self._get_urls()
-        data = self.parser.parse(urls)
-        self.session.add_all(data)
+        urls = self.__get_urls()
+        data = self.__parser.parse(urls)
+        self.__session.add_all(data)
