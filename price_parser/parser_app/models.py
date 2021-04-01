@@ -20,6 +20,9 @@ class Prices(models.Model):
     class Meta:
         managed = False
         db_table = 'prices'
+        verbose_name='Price'
+        verbose_name_plural='Prices'
+        ordering=['date', 'id']
 
 
 class Urls(models.Model):
@@ -29,3 +32,6 @@ class Urls(models.Model):
     class Meta:
         managed = False
         db_table = 'urls'
+        verbose_name='URL'
+        verbose_name_plural='URLs'
+        ordering=['id']
