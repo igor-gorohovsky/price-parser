@@ -10,6 +10,7 @@ class UrlsAdmin(admin.ModelAdmin):
 class PricesAdmin(admin.ModelAdmin):
     list_display = ('url_id', 'date', 'current_price', 'status')
     search_fields = ('current_price', 'status')
+    list_filter = ('status',)
 
 
 admin.site.register(Urls, UrlsAdmin)
