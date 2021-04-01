@@ -29,6 +29,9 @@ class Urls(models.Model):
 
     url = models.TextField(unique=True)
 
+    def __str__(self):
+        return f'{self.id}: {self.url}'
+
     class Meta:
         managed = False
         db_table = 'urls'
