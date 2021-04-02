@@ -33,6 +33,7 @@ class Urls(models.Model):
         upload_to='product',
         default='default.png'
     )
+    name = models.CharField(max_length=255, default='Undefiend name')
 
     def __str__(self):
         return f'{self.id}: {self.url}'
