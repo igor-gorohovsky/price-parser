@@ -7,6 +7,7 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 
 
 class Prices(models.Model):
@@ -34,6 +35,9 @@ class Urls(models.Model):
         default='default.png'
     )
     name = models.CharField(max_length=255, default='Undefiend name')
+
+    def get_absolute_url(self):
+        return reverse('info', kwargs={'product_id': self.pk})
 
     def __str__(self):
         return f'{self.id}: {self.url}'

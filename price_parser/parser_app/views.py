@@ -9,5 +9,13 @@ def index(request):
     return render(
         request,
         'parser_app/index.html',
-        context={'urls': urls, 'title': 'Rozetka Parser'},
+        context={'urls': urls},
+    )
+
+def product_info(request, product_id):
+    urls = Urls.objects.all()
+    return render(
+        request,
+        'parser_app/product_info.html',
+        context={'urls': urls},
     )

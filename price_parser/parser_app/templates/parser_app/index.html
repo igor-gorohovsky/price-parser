@@ -16,7 +16,7 @@
         <p class="card-text">Date: {{ item.data.last.date }}</p>
         <p class="card-text">Status: {{ item.data.last.status }}</p>
         <a href="{{ item.url }}" class="btn btn-primary">Go to Rozetka</a>
-        <a href="#" class="btn btn-primary">More details</a>
+        <a href="{{ item.get_absolute_url }}" class="btn btn-primary">More details</a>
       </div>
     </div>
   {% endfor %}
