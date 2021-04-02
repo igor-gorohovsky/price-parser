@@ -7,7 +7,12 @@
       <!-- <img src="..." class="card-img-top" alt="..."> -->
       <div class="card-body">
         <h5 class="card-title">{{ item.url }}</h5>
-        <p class="card-text"></p>
+        <p class="card-text">Price: {{ item.data.last.current_price }}</p>
+        {% if item.data.last.discount %}
+        <p class="card-text">Discount: {{ item.data.last.discount }}</p>
+        {% endif %}
+        <p class="card-text">Date: {{ item.data.last.date }}</p>
+        <p class="card-text">Status: {{ item.data.last.status }}</p>
         <a href="#" class="btn btn-primary">Go somewhere</a>
       </div>
     </div>

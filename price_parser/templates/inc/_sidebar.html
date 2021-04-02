@@ -1,22 +1,8 @@
 <ul class="list-group">
+  {% for item in urls %}
   <li class="list-group-item">
     <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-    First checkbox
+    {{ item.url|truncatechars:20 }}
   </li>
-  <li class="list-group-item">
-    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-    Second checkbox
-  </li>
-  <li class="list-group-item">
-    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-    Third checkbox
-  </li>
-  <li class="list-group-item">
-    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-    Fourth checkbox
-  </li>
-  <li class="list-group-item">
-    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-    Fifth checkbox
-  </li>
+  {% endfor %}
 </ul>

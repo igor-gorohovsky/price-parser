@@ -10,7 +10,7 @@ from django.db import models
 
 class Prices(models.Model):
 
-    url = models.ForeignKey('Urls', models.CASCADE)
+    url = models.ForeignKey('Urls', models.CASCADE, related_name='data')
     date = models.DateTimeField(auto_now_add=True)
     current_price = models.IntegerField(null=True)
     old_price = models.IntegerField(null=True)
