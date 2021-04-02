@@ -44,6 +44,6 @@ class Urls(models.Model):
 
     class Meta:
         db_table = 'urls'
-        verbose_name='URL'
-        verbose_name_plural='URLs'
+        verbose_name='Product'
+        verbose_name_plural='Products'
         ordering=['id']
