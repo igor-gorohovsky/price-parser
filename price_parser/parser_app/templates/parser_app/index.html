@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load parser_custom_filters %}
 
 {% block content %}
 <div class="card-column">
@@ -6,7 +7,7 @@
     <div class="card" style="width: 18rem;">
       <img src="{{ item.product_photo.url }}" class="card-img-top" alt="...">
       <div class="card-body">
-        <h5 class="card-title">{{ item.url }}</h5>
+        <h5 class="card-title">{{ item.name|cut_name }}</h5>
         <p class="card-text">Price: {{ item.data.last.current_price }}</p>
         {% if item.data.last.discount %}
         <p class="card-text">Discount: {{ item.data.last.discount }}</p>
