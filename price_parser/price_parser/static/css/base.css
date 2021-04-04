@@ -1,0 +1,8 @@
+body {
+  background-color: #fcfcfc;
+}
+
+.card-columns {
+  display: inline-block;
+  break-inside: avoid;
+}
