@@ -30,11 +30,12 @@ class Prices(models.Model):
 class Urls(models.Model):
 
     url = models.TextField(unique=True)
+    name = models.CharField(max_length=255, default='Undefiend name')
     product_photo = models.ImageField(
         upload_to='product',
         default='default.png'
     )
-    name = models.CharField(max_length=255, default='Undefiend name')
+    archive = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('info', kwargs={'product_id': self.pk})

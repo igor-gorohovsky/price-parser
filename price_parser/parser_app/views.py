@@ -19,3 +19,11 @@ def product_info(request, product_id):
         'parser_app/product_info.html',
         context={'urls': urls},
     )
+
+def archive(request):
+    urls = Urls.objects.filter(archive=True)
+    return render(
+        request,
+        'parser_app/index.html',
+        context={'urls': urls},
+    )
