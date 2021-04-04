@@ -8,3 +8,4 @@ testplot.png
 webapp.py
 db.sqlite3
 price_parser/price_parser/.env
+price_parser/static/

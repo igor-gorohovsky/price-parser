@@ -3,9 +3,10 @@
 {% load parser_custom_filters %}
 
 {% block content %}
-<div class="card-column">
+<div class="row row-cols-1 row-cols-md-3">
   {% for item in urls %}
-    <div class="card" style="width: 18rem;">
+  <div class="col">
+    <div class="card mt-1 h-100" style="width: 18rem;">
       <img src="{{ item.product_photo.url }}" class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">{{ item.name|cut_name }}</h5>
@@ -15,10 +16,13 @@
         {% endif %}
         <p class="card-text">Date: {{ item.data.last.date }}</p>
         <p class="card-text">Status: {{ item.data.last.status }}</p>
+      </div>
+      <div class="card-footer text-muted">
         <a href="{{ item.url }}" class="btn btn-primary">Go to Rozetka</a>
         <a href="{{ item.get_absolute_url }}" class="btn btn-primary">More details</a>
       </div>
     </div>
-  {% endfor %}
+  </div>
+{% endfor %}
 </div>
 {% endblock %}
