@@ -1,10 +1,12 @@
 {% load parser_custom_filters %}
 
-<ul class="list-group">
-  {% for item in urls %}
-  <li class="list-group-item">
-    <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
-    {{ item.name|cut_name }}
-  </li>
-  {% endfor %}
-</ul>
+<div class="vh-100 overflow-auto">
+  <ul class="list-group">
+    {% for item in urls %}
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+      {{ item.name|cut_name }}
+    </li>
+    {% endfor %}
+  </ul>
+</div>
