@@ -5,7 +5,7 @@ from .models import Urls
 
 
 def index(request):
-    urls = Urls.objects.all()
+    urls = Urls.objects.filter(archive=False)
     return render(
         request,
         'parser_app/index.html',
