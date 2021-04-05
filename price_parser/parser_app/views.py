@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
+from .forms import UrlsForm
 from .models import Urls
 
 
@@ -26,4 +27,16 @@ def archive(request):
         request,
         'parser_app/index.html',
         context={'urls': urls},
+    )
+
+
+def cabinet(request):
+    if request.method == 'POST':
+        pass
+    else:
+        form = UrlsForm()
+    return render(
+        request,
+        'parser_app/cabinet.html',
+        context={'form': form},
     )
