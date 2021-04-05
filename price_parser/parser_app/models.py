@@ -29,7 +29,7 @@ class Prices(models.Model):
 
 class Urls(models.Model):
 
-    url = models.TextField(unique=True)
+    url = models.URLField(unique=True)
     name = models.CharField(max_length=255, default='Undefiend name')
     product_photo = models.ImageField(
         upload_to='product',
