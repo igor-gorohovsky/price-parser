@@ -13,10 +13,7 @@
   <body>
     {% include 'inc/_navbar.html' %}
     <div class="row m-0">
-      <div class="col-md-3">
-          {% include 'inc/_sidebar.html' %}
-      </div>
-      <div class="col-md-9 mt-1">
+      <div class="col-md-12 mt-1">
         {% block content %}CONTENT{% endblock %}
       </div>
     </div>

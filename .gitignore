@@ -9,3 +9,4 @@ webapp.py
 db.sqlite3
 price_parser/price_parser/.env
 price_parser/static/
+price_parser/templates/inc/_sidebar.html
