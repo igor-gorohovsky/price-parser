@@ -27,15 +27,3 @@ class ProductView(DetailView):
     model = Urls
     template_name = 'parser_app/product_info.html'
     context_object_name = 'url'
-
-
-def cabinet(request):
-    if request.method == 'POST':
-        pass
-    else:
-        form = UrlsForm()
-    return render(
-        request,
-        'parser_app/cabinet.html',
-        context={'form': form},
-    )
