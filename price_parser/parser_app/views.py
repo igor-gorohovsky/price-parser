@@ -1,33 +1,32 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.views.generic import ListView, DetailView
 
 from .forms import UrlsForm
 from .models import Urls
 
 
-def index(request):
-    urls = Urls.objects.filter(archive=False)
-    return render(
-        request,
-        'parser_app/index.html',
-        context={'urls': urls},
-    )
+class HomeProductList(ListView):
+    model = Urls
+    template_name = 'parser_app/product_list.html'
+    context_object_name = 'urls'
 
-def product_info(request, product_id):
-    urls = Urls.objects.all()
-    return render(
-        request,
-        'parser_app/product_info.html',
-        context={'urls': urls},
-    )
+    def get_queryset(self):
+        return Urls.objects.filter(archive=False)
 
-def archive(request):
-    urls = Urls.objects.filter(archive=True)
-    return render(
-        request,
-        'parser_app/index.html',
-        context={'urls': urls},
-    )
+
+class ArchiveProductList(ListView):
+    model = Urls
+    template_name = 'parser_app/product_list.html'
+    context_object_name = 'urls'
+
+    def get_queryset(self):
+        return Urls.objects.filter(archive=True)
+
+
+class ProductView(DetailView):
+    model = Urls
+    template_name = 'parser_app/product_info.html'
+    context_object_name = 'url'
 
 
 def cabinet(request):

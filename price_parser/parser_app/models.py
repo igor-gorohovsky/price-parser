@@ -38,7 +38,7 @@ class Urls(models.Model):
     archive = models.BooleanField(default=False)
 
     def get_absolute_url(self):
-        return reverse('info', kwargs={'product_id': self.pk})
+        return reverse('info', kwargs={'pk': self.pk})
 
     def __str__(self):
         return f'{self.id}: {self.url}'
