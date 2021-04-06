@@ -1,1 +1,19 @@
 {% extends 'base.html' %}
+
+{% block content %}
+<div class="card mt-1 h-100" style="width: 18rem;">
+  <img src="{{ url.product_photo.url }}" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{ url.name }}</h5>
+    <p class="card-text">Price: {{ url.data.last.current_price }}</p>
+    {% if url.data.last.discount %}
+    <p class="card-text">Discount: {{ url.data.last.discount }}</p>
+    {% endif %}
+    <p class="card-text">Date: {{ url.data.last.date }}</p>
+    <p class="card-text">Status: {{ url.data.last.status }}</p>
+  </div>
+  <div class="card-footer text-muted">
+    <a href="{{ url.url }}" class="btn btn-primary">Go to Rozetka</a>
+  </div>
+</div>
+{% endblock %}
