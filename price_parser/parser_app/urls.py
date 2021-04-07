@@ -7,5 +7,5 @@ urlpatterns = [
     path('', views.HomeProductList.as_view(), name='index'),
     path('product_info/<int:pk>', views.ProductView.as_view(), name='info'),
     path('archive', views.ArchiveProductList.as_view(), name='archive'),
-    # path('cabinet', views.cabinet, name='cabinet'),
+    path('add_url', views.CreateUrl.as_view(), name='add_url'),
 ]
